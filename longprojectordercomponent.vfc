@@ -1,0 +1,533 @@
+<apex:component controller="LongProjectOrderController" access="global" rendered="true">
+  <apex:attribute description="lpo" name="lpo"  type="SalesOrder__c"/>
+  <apex:attribute description="Soid" name="Soid" type="Id" AssignTo="{!MasterRecordId}"/>
+
+
+
+<body class="start" >
+ <table width="25%" align="right">
+    <tr><td style="vertical-align:bottom;"><img src="{!$Resource.FitOutEquipment}" width="70" height="65"  title="logo" align="right"/></td>
+    <td><img src="{!$Resource.EclipseDentalLogo}" width="82" height="86"  title="logo" align="right"/></td></tr>
+</table>   
+               <br /> <br /> <br /> <br /> <br /> 
+                <div class="footer"> 
+                 <p style="border-top: 1px solid #038B99;" ><span style="color:#038B99;text-align:left"><b >Guaranteed solutions....</b> </span><br/> 
+                 {!$Label.Company_Name} | Westview Court |10-14 Kent Road | Dartford | Kent | DA1 2AJ |
+                 Tel: 01322 293333 | Email: info@eclipse-dental.com<br/>
+                 Vat No: GB 714315367 | Company Registration No.12402632 Registered at above address
+                 </p>    
+               </div> 
+ 
+               <table width="100%" >
+               <tr><td colspan="3" style="font-size:12pt;"><b>Project Contract</b></td></tr>
+               <tr><td>&nbsp;</td></tr>
+               <tr>
+                   <td width="5%">&nbsp;</td>
+                   <td width="50%">For the attention of :&nbsp;{!lpo.Contact__r.Name}</td>
+                   <td width="30%">&nbsp;</td>
+               </tr>
+               <tr>
+                   <td width="5%">&nbsp;</td>
+                   <td width="50%" style="vertical-align:top;"><apex:outputtext value="{!IF(lpo.Delivery_Address_new__c!='',lpo.Delivery_Address_new__c,lpo.Invoice_Address__c)}" escape="false"/>
+                       <br/><br/>Delivery Address:<br/><apex:outputtext value="{!lpo.Delivery_Address__c}" escape="false"/>
+                   </td>
+                   <td width="45%">
+                       <table align="left" border="">
+                           <tr>
+                               <td>Order No:</td>
+                               <td style="font-size:16px;">{!lpo.Name}</td>
+                           </tr>
+                            <tr>
+                           <td></td>
+                           <td></td>
+                           </tr>
+                           <tr>
+                               <td>Raised By:</td>
+                               <td>{!lpo.Raised_By__c}</td>
+                           </tr>
+                            <tr>
+                           <td></td>
+                           <td></td>
+                           </tr>
+                           <tr>
+                               <td>Date:</td>
+                               <td>
+                               <apex:outputText value=" {0,date,dd/MM/yyyy }"> <apex:param value="{!lpo.CreatedDate}"/></apex:outputtext>
+                               </td>
+                           </tr>
+                            <tr>
+                           <td></td>
+                           <td></td>
+                           </tr>
+                           <tr>
+                               <td>Your Ref:</td>
+                               <td>{!lpo.Customer_Order_Number__c}</td>
+                           </tr>
+                            <tr>
+                           <td></td>
+                           <td></td>
+                           </tr>
+                           <tr>
+                               <td>Phone:</td>
+                               <td><apex:outputField value="{!lpo.Contact__r.Phone}"/> </td>
+                           </tr>
+                            <tr>
+                           <td></td>
+                           <td></td>
+                           </tr>
+                           <tr>
+                               <td>Email:</td>
+                               <td>{!lpo.Contact__r.Email}</td>
+                           </tr>
+                            <tr>
+                           <td></td>
+                           <td></td>
+                           </tr>
+                           <tr>
+                               <td>Project:</td>
+                               <td>{!prono}</td>
+                           </tr>
+                            <tr>
+                           <td></td>
+                           <td></td>
+                           </tr>
+                           <tr>
+                               <td>Account Ref:</td>
+                               <td>{!lpo.Account__r.Name}</td>
+                           </tr>
+                       </table>       
+                   </td>
+               </tr>
+               </table>
+               
+              <p style="text-align:center;font-size:12pt"><b>Re: {!IF(ChildRecords.size>0,ChildRecords[0].name,'')}</b></p>
+                <br/>
+                Dear {!lpo.Contact__r.Salutation}&nbsp;{!lpo.Contact__r.Name},<br /><br />
+               We acknowledge your valued order for the above project and are proceeding on the following basis.<br /><br />
+               
+              <apex:outputPanel rendered="{!ChildRecords.size>0}"> 
+               <table border="" rendered="{!ChildRecords.size>0}">
+                 <apex:repeat value="{!ChildRecords[0]}" var="chii">
+                  <!-- <tr>
+                       <td style="vertical-align:top;">Invoiced To:</td>
+                       <td></td>
+                       <td></td>
+                   </tr>
+                   
+                   <tr>
+                       <td><apex:outputtext value="{!lpo.Invoice_Address__c}" escape="false"/></td>
+                       <td></td>
+                       <td></td>
+                   </tr> 
+                   <tr><td>&nbsp;</td></tr> -->
+                   <tr style="{!if(ChildRecords[0].Room1_Payment_Include_In_Print__c == true || ChildRecords[0].Room2_Payment_Include_In_Print__c == true,'','display:none;')}">                       
+                           <td>Summary of agreed Payment Schedule :&nbsp;</td>
+                           <td><apex:outputText rendered="{!(chii.Room1_Payment_Include_In_Print__c == true)}" value="{!chii.PAYMENT_SCHEDULE_Room1__c}" /></td>
+                           <td><apex:outputText rendered="{!(chii.Room2_Payment_Include_In_Print__c == true)}" value="{!chii.PAYMENT_SCHEDULE_Room2__c}" /></td>
+                   </tr>
+                   <tr style="{!if(ChildRecords[0].Room1_Payment_Include_In_Print__c == true || ChildRecords[0].Room2_Payment_Include_In_Print__c == true,'','display:none;')}"><td>&nbsp;</td></tr>
+                   
+                   <tr>
+                       <td colspan="3">Please make payments to: {!$Label.Company_Name} | Sort Code 30-91-91 | Account No. 45605968 | Lloyds Bank Plc stating your Account No. as a
+reference. Please note we do not accept cheques.</td>
+                   </tr>
+                   <tr ><td>&nbsp;</td></tr>
+                   
+                   <tr style="{!if(ChildRecords[0].Room1_Drawings_Include_In_Print__c == true || ChildRecords[0].Room2_Drawings_Include_In_Print__c == true,'','display:none;')}">
+                       <td>Drawing Agreed :</td>
+                       <td><apex:outputText rendered="{!AND(chii.Room1_Drawings_Include_In_Print__c == true,chii.DRAWINGS_Room1__c != null)}">{!chii.DRAWINGS_Room1__c}<br/></apex:outputText>
+                       <apex:outputText rendered="{!AND(chii.Room1_Drawings_Include_In_Print__c == true, chii.Room1_Drawing_finalised__c != null)}">{!chii.Room1_Drawing_finalised__c}<br/></apex:outputText>
+                       <apex:outputText rendered="{!AND(chii.Room1_Drawings_Include_In_Print__c == true, chii.Drawing_Reference_Room1__c != null)}">{!chii.Drawing_Reference_Room1__c}<br/></apex:outputText></td>
+                       <td><apex:outputText rendered="{!AND(chii.Room2_Drawings_Include_In_Print__c == true,chii.DRAWINGS_Room2__c != null)}">{!chii.DRAWINGS_Room2__c}<br/></apex:outputText>
+                       <apex:outputText rendered="{!AND(chii.Room2_Drawings_Include_In_Print__c == true, chii.Room2_Drawing_finalised__c != null)}">{!chii.Room2_Drawing_finalised__c}<br/></apex:outputText>
+                       <apex:outputText rendered="{!AND(chii.Room2_Drawings_Include_In_Print__c == true, chii.Drawing_Reference_Room2__c != null)}">{!chii.Drawing_Reference_Room2__c}<br/></apex:outputText></td>
+                   </tr>
+                   <tr style="{!if(ChildRecords[0].Room1_Drawings_Include_In_Print__c == true || ChildRecords[0].Room2_Drawings_Include_In_Print__c == true,'','display:none;')}"><td>&nbsp;</td></tr>
+                   
+                   <tr style="{!if(ChildRecords[0].Room1_Schedulework_Include_In_Print__c == true || ChildRecords[0].Room2_Schedulework_Include_In_Print__c== true,'','display:none;')}">
+                       <td>Schedule of Works :</td>
+                       <td><apex:outputText rendered="{!(chii.Room1_Schedulework_Include_In_Print__c == true)}" value="{!chii.SCHEDULE_OF_WORKS_Room1__c}" /></td>
+                       <td><apex:outputText rendered="{!(chii.Room2_Schedulework_Include_In_Print__c == true)}" value="{!chii.SCHEDULE_OF_WORKS_Room2__c}" /></td>
+                   </tr>
+                   <tr><td>&nbsp;</td></tr>
+                   <tr>
+                       <td colspan="3">Ready For Use On:&nbsp;&nbsp;{!chii.Ready_For_Use_On__c}</td>
+                   </tr>
+                   </apex:repeat>
+               </table> 
+               </apex:outputPanel>
+               <br/>
+               
+               <apex:outputPanel rendered="{!AND(ChildRecords.size>0,ChildRecords[0].Note_Points__c!=null)}">
+               <table width="100%" style="page-break-inside:avoid;">
+               <tr>
+               <td><h3 style="text-decoration: underline;">Please Note:</h3></td>
+               </tr>
+               <tr>
+               <td>
+               <apex:outputText value="{!ChildRecords[0].Note_Points__c}" escape="false"/>
+               </td>
+               </tr>
+               </table>
+               <br/>
+               </apex:outputPanel> 
+              
+               
+               <br/>
+               <apex:outputPanel rendered="{!ChildRecords.size>0}">
+               <table width="100%" style="page-break-inside:avoid;">
+               <tr style="text-decoration: underline;font-size:12pt"><td colspan="4"><b>Specification Schedule</b></td></tr>
+                 <tr><td>&nbsp;</td></tr>
+                   <tr style="{!if(ChildRecords[0].Room1_Worktop_Include_In_Print__c == true || ChildRecords[0].Room2_Worktop_Include_In_Print__c == true,'','display:none;')}">
+                       <td width="16%" style="vertical-align:top;">Worktop</td>
+                       <td width="41%"><apex:outputText rendered="{!AND(ChildRecords[0].Room1_Worktop_Include_In_Print__c == true,ChildRecords[0].WORKTOP_Room1__c!=null)}">{!ChildRecords[0].WORKTOP_Room1__c}<br/></apex:outputtext>
+                       <apex:outputText rendered="{!AND(ChildRecords[0].Room1_Worktop_Include_In_Print__c == true,ChildRecords[0].Room1_Worktop_Type__c!=null)}">{!ChildRecords[0].Room1_Worktop_Type__c}<br/></apex:outputtext>
+                       <apex:outputText rendered="{!AND(ChildRecords[0].Room1_Worktop_Include_In_Print__c == true,ChildRecords[0].Room1_Worktop_Color__c!=null)}" value=" {!ChildRecords[0].Room1_Worktop_Color__c} " /></td>
+                       <td width="2%"></td>
+                       <td width="41%"><apex:outputText rendered="{!AND(ChildRecords[0].Room2_Worktop_Include_In_Print__c == true,ChildRecords[0].WORKTOP_Room2__c!=null)}">{!ChildRecords[0].WORKTOP_Room2__c}<br/></apex:outputtext>
+                       <apex:outputText rendered="{!AND(ChildRecords[0].Room2_Worktop_Include_In_Print__c == true,ChildRecords[0].Room2_Worktop_Type__c!=null)}">{!ChildRecords[0].Room2_Worktop_Type__c}<br/></apex:outputtext>
+                       <apex:outputText rendered="{!AND(ChildRecords[0].Room2_Worktop_Include_In_Print__c == true,ChildRecords[0].Room2_Worktop_Color__c!=null)}" value="{!ChildRecords[0].Room2_Worktop_Color__c}" /></td>
+                   <br style="{!if(ChildRecords[0].Room1_Worktop_Include_In_Print__c == true || ChildRecords[0].Room2_Worktop_Include_In_Print__c == true,'','display:none;')}"/>
+                   </tr>
+                   </table>
+                   
+                   <table width="100%" style="page-break-inside:avoid;">
+                   <tr style="{!if(ChildRecords[0].Room1_fronts_Include_In_Print__c == true || ChildRecords[0].Room2_fronts_Include_In_Print__c == true,'','display:none;')}">
+                       <td width="16%" style="vertical-align:top;">Fronts</td>
+                       <td width="41%"><apex:outputText rendered="{!AND(ChildRecords[0].Room1_fronts_Include_In_Print__c == true,ChildRecords[0].FRONTS_Room1__c!=null)}">{!ChildRecords[0].FRONTS_Room1__c}<br/></apex:outputtext>
+                       <apex:outputText rendered="{!AND(ChildRecords[0].Room1_fronts_Include_In_Print__c == true,ChildRecords[0].Room1_Frontal_Type__c!=null)}" value="{!ChildRecords[0].Room1_Frontal_Type__c}"/></td>
+                       <td width="2%"></td>
+                       <td width="41%"><apex:outputText rendered="{!AND(ChildRecords[0].Room2_fronts_Include_In_Print__c == true,ChildRecords[0].FRONTS_Room2__c!=null)}">{!ChildRecords[0].FRONTS_Room2__c}<br/></apex:outputtext>
+                       <apex:outputText rendered="{!AND(ChildRecords[0].Room2_fronts_Include_In_Print__c == true,ChildRecords[0].Room2_Frontal_Type__c!=null)}" value="{!ChildRecords[0].Room2_Frontal_Type__c}" /></td>
+                   <br style="{!if(ChildRecords[0].Room1_fronts_Include_In_Print__c == true || ChildRecords[0].Room2_fronts_Include_In_Print__c == true,'','display:none;')}"/>
+                   </tr>
+                   </table>
+                   
+                   <table width="100%" style="page-break-inside:avoid;">
+                   <tr style="{!if(ChildRecords[0].Room1_Plinth_Include_In_Print__c== true || ChildRecords[0].Room2_Plinth_Include_In_Print__c == true,'','display:none;')}">
+                       <td width="16%" style="vertical-align:top;">Plinth</td>
+                       <td width="41%"><apex:outputText rendered="{!AND(ChildRecords[0].Room1_Plinth_Include_In_Print__c == true,ChildRecords[0].PLINTH_Room1__c!=null)}">{!ChildRecords[0].PLINTH_Room1__c}<br/></apex:outputtext>
+                       <apex:outputText rendered="{!AND(ChildRecords[0].Room1_Plinth_Include_In_Print__c == true,ChildRecords[0].Room1_Plinth__c!=null)}" value="{!ChildRecords[0].Room1_Plinth__c}" /></td>
+                       <td width="2%"></td>
+                       <td width="41%"><apex:outputText rendered="{!AND(ChildRecords[0].Room2_Plinth_Include_In_Print__c == true,ChildRecords[0].PLINTH_Room2__c!=null)}">{!ChildRecords[0].PLINTH_Room2__c}<br/></apex:outputtext>
+                       <apex:outputText rendered="{!AND(ChildRecords[0].Room2_Plinth_Include_In_Print__c == true,ChildRecords[0].Room2_Plinth__c!=null)}" value="{!ChildRecords[0].Room2_Plinth__c}"/></td>
+                   <br style="{!if(ChildRecords[0].Room1_Plinth_Include_In_Print__c== true || ChildRecords[0].Room2_Plinth_Include_In_Print__c == true,'','display:none;')}"/>
+                   </tr>
+                   </table>
+                   
+                   <table width="100%" style="page-break-inside:avoid;">
+                   <tr style="{!if(ChildRecords[0].Room1_panels_Include_In_Print__c == true || ChildRecords[0].Room2_panels_Include_In_Print__c == true,'','display:none;')}">
+                       <td width="16%" style="vertical-align:top;">End Panels</td>
+                       <td width="41%"><apex:outputText rendered="{!AND(ChildRecords[0].Room1_panels_Include_In_Print__c == true,ChildRecords[0].END_PANELS_Room1__c!=null)}" value="{!ChildRecords[0].END_PANELS_Room1__c}" /></td>
+                       <td width="2%"></td>
+                       <td width="41%"><apex:outputText rendered="{!AND(ChildRecords[0].Room2_panels_Include_In_Print__c == true,ChildRecords[0].END_PANELS_Room2__c!=null)}" value="{!ChildRecords[0].END_PANELS_Room2__c}" /></td>
+                   <br style="{!if(ChildRecords[0].Room1_panels_Include_In_Print__c == true || ChildRecords[0].Room2_panels_Include_In_Print__c == true,'','display:none;')}"/>
+                   </tr>
+                   </table>                  
+                  
+                   
+                   <table width="100%" style="page-break-inside:avoid;">
+                   <tr style="{!if(ChildRecords[0].Room1_Handles_Include_In_Print__c == true || ChildRecords[0].Room2_Handles_Include_In_Print__c == true,'','display:none;')}">
+                       <td width="16%" style="vertical-align:top;">Handles</td>
+                       <td width="41%"><apex:outputText rendered="{!AND(ChildRecords[0].Room1_Handles_Include_In_Print__c = true,ChildRecords[0].HANDLES_Room1__c!=null)}">{!ChildRecords[0].HANDLES_Room1__c}<br/></apex:outputtext>
+                       <apex:outputText rendered="{!AND(ChildRecords[0].Room1_Handles_Include_In_Print__c =true,ChildRecords[0].Room1_Handles__c!=null)}" value="{!ChildRecords[0].Room1_Handles__c}" /></td>
+                       <td width="2%"></td>
+                       <td width="41%"><apex:outputText rendered="{!AND(ChildRecords[0].Room2_Handles_Include_In_Print__c = true,ChildRecords[0].HANDLES_Room2__c!=null)}">{!ChildRecords[0].HANDLES_Room2__c}<br/></apex:outputtext>
+                       <apex:outputText rendered="{!AND(ChildRecords[0].Room2_Handles_Include_In_Print__c =true,ChildRecords[0].Room2_Handles__c!=null)}" value="{!ChildRecords[0].Room2_Handles__c}" /></td>
+                   <br style="{!if(ChildRecords[0].Room1_Handles_Include_In_Print__c == true || ChildRecords[0].Room2_Handles_Include_In_Print__c == true,'','display:none;')}"/>
+                   </tr>
+                  </table>
+                  
+                  
+                  <table width="100%" style="page-break-inside:avoid;">
+                  <tr style="{!if(ChildRecords[0].Room1_sinks_Include_In_Print__c == true || ChildRecords[0].Room2_sinks_Include_In_Print__c == true,'','display:none;')}">
+                       <td width="16%" style="vertical-align:top;">Sinks</td>
+                       <td width="41%"><apex:outputText rendered="{!AND(ChildRecords[0].Room1_sinks_Include_In_Print__c == true,ChildRecords[0].SINKS_Room1__c!=null)}">{!ChildRecords[0].SINKS_Room1__c}<br/></apex:outputtext>
+                       <apex:outputText rendered="{!AND(ChildRecords[0].Room1_sinks_Include_In_Print__c == true,ChildRecords[0].Room1_Bowl_Type__c!=null)}">{!ChildRecords[0].Room1_Bowl_Type__c}<br/></apex:outputtext></td> 
+                       <td width="2%"></td>
+                       <td width="41%"><apex:outputText rendered="{!AND(ChildRecords[0].Room2_sinks_Include_In_Print__c == true,ChildRecords[0].SINKS_Room2__c!=null)}">{!ChildRecords[0].SINKS_Room2__c}<br/></apex:outputtext>
+                       <apex:outputText rendered="{!AND(ChildRecords[0].Room2_sinks_Include_In_Print__c == true,ChildRecords[0].Room2_Bowl_Type__c!=null)}">{!ChildRecords[0].Room2_Bowl_Type__c}<br/></apex:outputtext></td>
+                   <br style="{!if(ChildRecords[0].Room1_sinks_Include_In_Print__c == true || ChildRecords[0].Room2_sinks_Include_In_Print__c == true,'','display:none;')}"/>
+                   </tr>
+                   </table>
+                   
+                   <table width="100%" style="page-break-inside:avoid;">
+                  <tr style="{!if(ChildRecords[0].Room1_Taps_Include_In_Print__c == true || ChildRecords[0].Room2_Taps_Include_In_Print__c == true,'','display:none;')}"><!-- {!ChildRecords[0].TAPS_Room1__c} -->
+                       <td width="16%" style="vertical-align:top;">Taps</td>
+                       <td width="41%"><apex:outputText rendered="{!AND(ChildRecords[0].Room1_Taps_Include_In_Print__c == true,ChildRecords[0].TAPS_Room1__c!=null)}">{!ChildRecords[0].TAPS_Room1__c}<br/></apex:outputtext>
+                       <apex:outputText rendered="{!AND(ChildRecords[0].Room1_Taps_Include_In_Print__c == true,ChildRecords[0].Room1_Taps__c!=null)}" value="{!ChildRecords[0].Room1_Taps__c}" /></td>
+                       <td width="2%"></td>
+                       <td width="41%"><apex:outputText rendered="{!AND(ChildRecords[0].Room2_Taps_Include_In_Print__c == true,ChildRecords[0].TAPS_Room2__c!=null)}">{!ChildRecords[0].TAPS_Room2__c}<br/></apex:outputtext>
+                       <apex:outputText rendered="{!AND(ChildRecords[0].Room2_Taps_Include_In_Print__c == true,ChildRecords[0].Room2_Taps__c!=null)}" value="{!ChildRecords[0].Room2_Taps__c}" /></td>
+                   <br style="{!if(ChildRecords[0].Room1_Taps_Include_In_Print__c == true || ChildRecords[0].Room2_Taps_Include_In_Print__c == true,'','display:none;')}"/>
+                   </tr>
+                  </table>
+                  
+                  <table width="100%" style="page-break-inside:avoid;">
+                  <tr style="{!if(ChildRecords[0].Room1_Sockets_Include_In_Print__c == true || ChildRecords[0].Room2_Sockets_Include_In_Print__c == true,'','display:none;')}">
+                       <td width="16%" style="vertical-align:top;">Sockets</td>
+                       <td width="41%"><apex:outputText rendered="{!AND(ChildRecords[0].Room1_Sockets_Include_In_Print__c == true,ChildRecords[0].SOCKETS_Room1__c!=null)}">{!ChildRecords[0].SOCKETS_Room1__c}<br/></apex:outputtext>
+                       <apex:outputText rendered="{!AND(ChildRecords[0].Room1_Sockets_Include_In_Print__c == true,ChildRecords[0].Room1_Sockets__c!=null)}" value="{!ChildRecords[0].Room1_Sockets__c}" /></td>
+                       <td width="2%"></td>
+                       <td width="41%"><apex:outputText rendered="{!AND(ChildRecords[0].Room2_Sockets_Include_In_Print__c == true,ChildRecords[0].SOCKETS_Room2__c!=null)}">{!ChildRecords[0].SOCKETS_Room2__c}<br/></apex:outputtext>
+                       <apex:outputText rendered="{!AND(ChildRecords[0].Room2_Sockets_Include_In_Print__c == true,ChildRecords[0].Room2_Sockets__c!=null)}" value="{!ChildRecords[0].Room2_Sockets__c}" /></td>                      
+                   <br style="{!if(ChildRecords[0].Room1_Sockets_Include_In_Print__c == true || ChildRecords[0].Room2_Sockets_Include_In_Print__c == true,'','display:none;')}"/>
+                   </tr>
+                   </table>
+                   
+                   <table width="100%" style="page-break-inside:avoid;">
+                   <tr style="{!if(ChildRecords[0].Room1_Dispensors_Include_In_Print__c == true || ChildRecords[0].Room2_Dispensors_Include_In_Print__c == true,'','display:none;')}">
+                       <td width="16%" style="vertical-align:top;">Dispensers</td>
+                       <td width="41%"><apex:outputText rendered="{!AND(ChildRecords[0].Room1_Dispensors_Include_In_Print__c == true,ChildRecords[0].DISPENSERS_Room1__c!=null)}">{!ChildRecords[0].DISPENSERS_Room1__c}<br/></apex:outputtext>
+                       <apex:outputText rendered="{!AND(ChildRecords[0].Room1_Dispensors_Include_In_Print__c == true,ChildRecords[0].Room1_Dispensors__c!=null)}" value="{!ChildRecords[0].Room1_Dispensors__c}" /></td>
+                       <td width="2%"></td>
+                       
+                       <td width="41%"><apex:outputText rendered="{!AND(ChildRecords[0].Room2_Dispensors_Include_In_Print__c == true,ChildRecords[0].DISPENSERS_Room2__c!=null)}">{!ChildRecords[0].DISPENSERS_Room2__c}<br/></apex:outputtext>
+                       <apex:outputText rendered="{!AND(ChildRecords[0].Room2_Dispensors_Include_In_Print__c == true,ChildRecords[0].Room2_Dispensors__c!=null)}" value="{!ChildRecords[0].Room2_Dispensors__c}" /></td>
+                   <br style="{!if(ChildRecords[0].Room1_Dispensors_Include_In_Print__c == true || ChildRecords[0].Room2_Dispensors_Include_In_Print__c == true,'','display:none;')}"/>
+                   </tr>
+                   </table>
+                   
+                   <table width="100%" style="page-break-inside:avoid;">
+                   <tr style="{!if(ChildRecords[0].Room1_Unitconfig_Include_In_Print__c == true,'','display:none;')}">
+                       <td width="16%" style="vertical-align:top;">Unit Configuration<br/>Room1</td>
+                       <td width="84%"><apex:outputText rendered="{!AND(ChildRecords[0].Room1_Unitconfig_Include_In_Print__c == true,ChildRecords[0].UNIT_CONFIGURATION_Room1__c!=null)}">{!ChildRecords[0].UNIT_CONFIGURATION_Room1__c}<br/></apex:outputtext>
+                       <apex:outputText rendered="{!AND(ChildRecords[0].Room1_Unitconfig_Include_In_Print__c == true,ChildRecords[0].Room1_Unit_Configuration1__c!=null)}">{!ChildRecords[0].Room1_Unit_Configuration1__c}<br/></apex:outputtext>
+                       <apex:outputText rendered="{!AND(ChildRecords[0].Room1_Unitconfig_Include_In_Print__c == true,ChildRecords[0].Room1_Unit_Configuration2__c!=null)}">{!ChildRecords[0].Room1_Unit_Configuration2__c}<br/></apex:outputtext>
+                       <apex:outputText rendered="{!AND(ChildRecords[0].Room1_Unitconfig_Include_In_Print__c == true,ChildRecords[0].Room1_Unit_Configuration3__c!=null)}">{!ChildRecords[0].Room1_Unit_Configuration3__c}<br/></apex:outputtext>
+                       <apex:outputText rendered="{!AND(ChildRecords[0].Room1_Unitconfig_Include_In_Print__c == true,ChildRecords[0].Room1_Unit_Configuration4__c!=null)}">{!ChildRecords[0].Room1_Unit_Configuration4__c}<br/></apex:outputtext>
+                       <apex:outputText rendered="{!AND(ChildRecords[0].Room1_Unitconfig_Include_In_Print__c == true,ChildRecords[0].Room1_Unit_Configuration5__c!=null)}" value="{!ChildRecords[0].Room1_Unit_Configuration5__c}" /></td>
+                   <br style="{!if(ChildRecords[0].Room1_Unitconfig_Include_In_Print__c == true,'','display:none;')}"/>
+                   </tr>
+                   </table>
+                   
+                   <table width="100%" style="page-break-inside:avoid;">
+                   <tr style="{!if(ChildRecords[0].Room2_Unitconfig_Include_In_Print__c == true,'','display:none;')}">
+                       <td width="16%" style="vertical-align:top;">Unit Configuration<br/>Room2</td>
+                       <td width="84%"><apex:outputText rendered="{!AND(ChildRecords[0].Room2_Unitconfig_Include_In_Print__c == true,ChildRecords[0].UNIT_CONFIGURATION_Room2__c!=null)}">{!ChildRecords[0].UNIT_CONFIGURATION_Room2__c}<br/></apex:outputtext>
+                       <apex:outputText rendered="{!AND(ChildRecords[0].Room2_Unitconfig_Include_In_Print__c == true,ChildRecords[0].Room2_Unit_Configuration1__c!=null)}">{!ChildRecords[0].Room2_Unit_Configuration1__c}<br/></apex:outputtext>
+                       <apex:outputText rendered="{!AND(ChildRecords[0].Room2_Unitconfig_Include_In_Print__c == true,ChildRecords[0].Room2_Unit_Configuration2__c!=null)}">{!ChildRecords[0].Room2_Unit_Configuration2__c}<br/></apex:outputtext>
+                       <apex:outputText rendered="{!AND(ChildRecords[0].Room2_Unitconfig_Include_In_Print__c == true,ChildRecords[0].Room2_Unit_Configuration3__c!=null)}">{!ChildRecords[0].Room2_Unit_Configuration3__c}<br/></apex:outputtext>
+                       <apex:outputText rendered="{!AND(ChildRecords[0].Room2_Unitconfig_Include_In_Print__c == true,ChildRecords[0].Room2_Unit_Configuration4__c!=null)}">{!ChildRecords[0].Room2_Unit_Configuration4__c}<br/></apex:outputtext>
+                       <apex:outputText rendered="{!AND(ChildRecords[0].Room2_Unitconfig_Include_In_Print__c == true,ChildRecords[0].Room2_Unit_Configuration5__c!=null)}" value="{!ChildRecords[0].Room2_Unit_Configuration5__c}"/></td>
+                   <br style="{!if(ChildRecords[0].Room2_Unitconfig_Include_In_Print__c == true,'','display:none;')}"/>
+                   </tr>
+                   </table>
+                   
+                   <table width="100%" style="page-break-inside:avoid;">
+                   <tr style="{!if(ChildRecords[0].Room1_upholstery_Include_In_Print__c == true || ChildRecords[0].Room2_upholstery_Include_In_Print__c == true,'','display:none;')}">
+                       <td width="16%" style="vertical-align:top;">Upholstery</td>
+                       <td width="41%"><apex:outputText rendered="{!AND(ChildRecords[0].Room1_upholstery_Include_In_Print__c == true,ChildRecords[0].UPHOLSTERY_Room1__c!=null)}">{!ChildRecords[0].UPHOLSTERY_Room1__c}<br/></apex:outputtext>
+                       <apex:outputText rendered="{!AND(ChildRecords[0].Room1_upholstery_Include_In_Print__c == true,ChildRecords[0].Room1_Chair_upholstery_colour__c!=null)}" value="{!ChildRecords[0].Room1_Chair_upholstery_colour__c}" /></td>
+                       <td width="2%"></td>                       
+                       <td width="41%"><apex:outputText rendered="{!AND(ChildRecords[0].Room2_upholstery_Include_In_Print__c == true,ChildRecords[0].UPHOLSTERY_Room2__c!=null)}">{!ChildRecords[0].UPHOLSTERY_Room2__c}<br/></apex:outputtext>
+                       <apex:outputText rendered="{!AND(ChildRecords[0].Room2_upholstery_Include_In_Print__c == true,ChildRecords[0].Room2_Chair_upholstery_colour__c!=null)}" value="{!ChildRecords[0].Room2_Chair_upholstery_colour__c}" /></td>
+                   <br style="{!if(ChildRecords[0].Room1_upholstery_Include_In_Print__c == true || ChildRecords[0].Room2_upholstery_Include_In_Print__c == true,'','display:none;')}"/>
+                   </tr>
+                   </table>
+                   
+                   <table width="100%" style="page-break-inside:avoid;">
+                   <tr style="{!if(ChildRecords[0].Room1_Flooring_Include_In_Print__c == true || ChildRecords[0].Room2_Flooring_Include_In_Print__c == true,'','display:none;')}">
+                       <td width="16%" style="vertical-align:top;">Flooring</td>
+                       <td width="41%"><apex:outputText rendered="{!AND(ChildRecords[0].Room1_Flooring_Include_In_Print__c == true,ChildRecords[0].FLOORING_Room1__c!=null)}">{!ChildRecords[0].FLOORING_Room1__c}<br/></apex:outputtext>
+                       <apex:outputText rendered="{!AND(ChildRecords[0].Room1_Flooring_Include_In_Print__c == true,ChildRecords[0].Room1_Flooring__c!=null)}" value="{!ChildRecords[0].Room1_Flooring__c}" /></td>
+                       <td width="2%"></td>                       
+                       <td width="41%"><apex:outputText rendered="{!AND(ChildRecords[0].Room2_Flooring_Include_In_Print__c == true,ChildRecords[0].FLOORING_Room2__c!=null)}">{!ChildRecords[0].FLOORING_Room2__c}<br/></apex:outputtext>
+                       <apex:outputText rendered="{!AND(ChildRecords[0].Room2_Flooring_Include_In_Print__c == true,ChildRecords[0].Room2_Flooring__c!=null)}" value="{!ChildRecords[0].Room2_Flooring__c}"/></td>
+                   <br style="{!if(ChildRecords[0].Room1_Flooring_Include_In_Print__c == true || ChildRecords[0].Room2_Flooring_Include_In_Print__c == true,'','display:none;')}"/>
+                   </tr>
+                   </table>
+                   
+                   <table width="100%" style="page-break-inside:avoid;">
+                   <tr style="{!if(ChildRecords[0].Room1_Capping_Include_In_Print__c == true || ChildRecords[0].Room2_Capping_Include_In_Print__c == true,'','display:none;')}">
+                       <td width="16%" style="vertical-align:top;">Capping</td>
+                       <td width="41%"><apex:outputText rendered="{!AND(ChildRecords[0].Room1_Capping_Include_In_Print__c == true,ChildRecords[0].CAPPING_Room1__c!=null)}">{!ChildRecords[0].CAPPING_Room1__c}<br/></apex:outputtext>
+                       <apex:outputText rendered="{!AND(ChildRecords[0].Room1_Capping_Include_In_Print__c == true,ChildRecords[0].Room1_Cove_and_Capped__c!=null)}">{!ChildRecords[0].Room1_Cove_and_Capped__c}<br/></apex:outputtext>
+                       <apex:outputText rendered="{!AND(ChildRecords[0].Room1_Capping_Include_In_Print__c == true,ChildRecords[0].Room1_Capping_Colour__c!=null)}" value="{!ChildRecords[0].Room1_Capping_Colour__c}"/></td>
+                       <td width="2%"></td>
+                       <td width="41%"><apex:outputText rendered="{!AND(ChildRecords[0].Room2_Capping_Include_In_Print__c == true,ChildRecords[0].CAPPING_Room2__c!=null)}">{!ChildRecords[0].CAPPING_Room2__c}<br/></apex:outputtext>
+                       <apex:outputText rendered="{!AND(ChildRecords[0].Room2_Capping_Include_In_Print__c == true,ChildRecords[0].Room2_Cove_and_Capped__c!=null)}">{!ChildRecords[0].Room2_Cove_and_Capped__c}<br/></apex:outputtext>
+                       <apex:outputText rendered="{!AND(ChildRecords[0].Room2_Capping_Include_In_Print__c == true,ChildRecords[0].Room2_Capping_Colour__c!=null)}" value="{!ChildRecords[0].Room2_Capping_Colour__c}"/></td>
+                   <br style="{!if(ChildRecords[0].Room1_Capping_Include_In_Print__c == true || ChildRecords[0].Room2_Capping_Include_In_Print__c == true,'','display:none;')}"/>
+                   </tr>
+                   </table>
+                   
+                   <table width="100%" style="page-break-inside:avoid;">
+                   <tr style="vertical-align:top;{!if(ChildRecords[0].Room1_Decorating_Include_In_Print__c == true || ChildRecords[0].Room2_Decorating_Include_In_Print__c  == true,'','display:none;')}">
+                       <td width="16%" style="vertical-align:top;">Decorations</td>
+                       <td style="vertical-align:top;" width="41%"><apex:outputText rendered="{!AND(ChildRecords[0].Room1_Decorating_Include_In_Print__c == true,ChildRecords[0].DECORATING_Room1__c!=null)}">{!ChildRecords[0].DECORATING_Room1__c}<br/></apex:outputtext>
+                       <apex:outputText rendered="{!AND(ChildRecords[0].Room1_Decorating_Include_In_Print__c == true,ChildRecords[0].Room1_Ceiling_Paint_Colour__c!=null)}">Ceiling-{!ChildRecords[0].Room1_Ceiling_Paint_Colour__c}<br/></apex:outputtext>
+                       <apex:outputText rendered="{!AND(ChildRecords[0].Room1_Decorating_Include_In_Print__c == true,ChildRecords[0].Room1_Woodwork_Paint_Colour__c!=null)}">Woodwork-{!ChildRecords[0].Room1_Woodwork_Paint_Colour__c}<br/></apex:outputtext>
+                       <apex:outputText rendered="{!AND(ChildRecords[0].Room1_Decorating_Include_In_Print__c == true,ChildRecords[0].Room1_Wall_Paint_Colour__c!=null)}">Wall-{!ChildRecords[0].Room1_Wall_Paint_Colour__c}<br/></apex:outputtext>
+                       <apex:outputText rendered="{!AND(ChildRecords[0].Room1_Decorating_Include_In_Print__c == true,ChildRecords[0].Features1__c!=null)}" value="{!ChildRecords[0].Features1__c}" /></td>
+                       <td width="2%"></td>
+                       <td width="41%"><apex:outputText rendered="{!AND(ChildRecords[0].Room2_Decorating_Include_In_Print__c == true,ChildRecords[0].DECORATING_Room2__c!=null)}">{!ChildRecords[0].DECORATING_Room2__c}<br/></apex:outputtext>
+                       <apex:outputText rendered="{!AND(ChildRecords[0].Room2_Decorating_Include_In_Print__c == true,ChildRecords[0].Room2_Ceiling_Paint_Colour__c!=null)}">Ceiling-{!ChildRecords[0].Room2_Ceiling_Paint_Colour__c}<br/></apex:outputtext>
+                       <apex:outputText rendered="{!AND(ChildRecords[0].Room2_Decorating_Include_In_Print__c == true,ChildRecords[0].Room2_Woodwork_Paint_Colour__c!=null)}">Woodwork-{!ChildRecords[0].Room2_Woodwork_Paint_Colour__c}<br/></apex:outputtext>
+                       <apex:outputText rendered="{!AND(ChildRecords[0].Room2_Decorating_Include_In_Print__c == true,ChildRecords[0].Room2_Wall_Paint_Colour__c!=null)}">Wall-{!ChildRecords[0].Room2_Wall_Paint_Colour__c}<br/></apex:outputtext>
+                       <apex:outputText rendered="{!AND(ChildRecords[0].Room1_Decorating_Include_In_Print__c == true,ChildRecords[0].Features2__c!=null)}" value="{!ChildRecords[0].Features2__c}"/></td>
+                   <br style="vertical-align:top;{!if(ChildRecords[0].Room1_Decorating_Include_In_Print__c == true || ChildRecords[0].Room2_Decorating_Include_In_Print__c  == true,'','display:none;')}"/>
+                   </tr>
+                   </table>
+                   
+                   <table width="100%" style="page-break-inside:avoid;">
+                   <tr style="{!if(ChildRecords[0].Room1_Splashbacks_Include_In_Print__c == true || ChildRecords[0].Room2_Splashbacks_Include_In_Print__c == true,'','display:none;')}">
+                       <td width="16%" style="vertical-align:top;">Splashbacks</td>
+                       <td width="41%"><apex:outputText rendered="{!AND(ChildRecords[0].Room1_Splashbacks_Include_In_Print__c == true,ChildRecords[0].SPLASHBACKS_Room1__c!=null)}">{!ChildRecords[0].SPLASHBACKS_Room1__c}<br/></apex:outputtext>
+                       <apex:outputText rendered="{!AND(ChildRecords[0].Room1_Splashbacks_Include_In_Print__c == true,ChildRecords[0].Room1_Splashbacks__c!=null)}" value="{!ChildRecords[0].Room1_Splashbacks__c}" /></td>
+                       <td width="2%"></td> 
+                       <td width="41%"><apex:outputText rendered="{!AND(ChildRecords[0].Room2_Splashbacks_Include_In_Print__c == true,ChildRecords[0].SPLASHBACKS_Room2__c!=null)}">{!ChildRecords[0].SPLASHBACKS_Room2__c}<br/></apex:outputtext>
+                       <apex:outputText rendered="{!AND(ChildRecords[0].Room2_Splashbacks_Include_In_Print__c == true,ChildRecords[0].Room2_Splashbacks__c!=null)}" value="{!ChildRecords[0].Room2_Splashbacks__c}" /></td>
+                       <br style="{!if(ChildRecords[0].Room1_Splashbacks_Include_In_Print__c == true || ChildRecords[0].Room2_Splashbacks_Include_In_Print__c == true,'','display:none;')}"/>
+                   </tr>
+                   </table>
+                   
+                   <table width="100%" style="page-break-inside:avoid;">
+                   <tr style="{!if(ChildRecords[0].Room1_RPA_Include_In_Print__c == true || ChildRecords[0].Room2_RPA_Include_In_Print__c == true,'','display:none;')}">
+                       <td width="16%" style="vertical-align:top;">RPA</td>
+                       <td width="41%"><apex:outputText rendered="{!AND(ChildRecords[0].Room1_RPA_Include_In_Print__c == true,ChildRecords[0].RPA_Room1__c!=null)}">{!ChildRecords[0].RPA_Room1__c}<br/></apex:outputtext>
+                       <apex:outputText rendered="{!AND(ChildRecords[0].Room1_RPA_Include_In_Print__c == true,ChildRecords[0].Room1_Client_received_approval__c!=null)}" value="{!ChildRecords[0].Room1_Client_received_approval__c}" /></td>
+                       <td width="2%"></td>                       
+                       <td width="41%"><apex:outputText rendered="{!AND(ChildRecords[0].Room2_RPA_Include_In_Print__c == true,ChildRecords[0].RPA_Room2__c!=null)}">{!ChildRecords[0].RPA_Room2__c}<br/></apex:outputtext>
+                       <apex:outputText rendered="{!AND(ChildRecords[0].Room2_RPA_Include_In_Print__c == true,ChildRecords[0].Room2_Client_received_approval__c!=null)}" value="{!ChildRecords[0].Room2_Client_received_approval__c}" /></td>
+                   <br style="{!if(ChildRecords[0].Room1_RPA_Include_In_Print__c == true || ChildRecords[0].Room2_RPA_Include_In_Print__c == true,'','display:none;')}"/>
+                   </tr>
+               </table>
+               </apex:outputPanel> 
+               
+               
+               <br /><br />
+               <br /><br /><br />
+                <table  border="" cellspacing="0" cellpadding="0" width="100%" style="page-break-before:always;" >
+                    <tr style="background-color:#4DB2BE;color:white;font-size:17px;">     
+                     <td align="left" width="6"> <b>Item  </b> </td>
+                     <td align="left" width ="48%"><b>Product</b></td>
+                     <td align="center" width ="8%"><b>Qty</b></td>
+                     <td align="center" width ="8%"><b>Unit</b></td>
+                     <td align="right" width ="15%"><b>Price</b></td>
+                     <td align="right" width ="15%"><b>Total Price</b></td>  
+                    </tr>
+                <!--</table>-->  
+                <apex:variable var="count" value="{!1}"   />    
+                <!--<table border="" width="100%" style="page-break-inside:avoid;">-->
+                    <apex:repeat value="{!salesoli}" var="lpoline">
+                              <tr>
+                              <td align="center" width="6" valign="top">{!count} </td>
+                              <td align="left" width="48%" valign="top"> <apex:outputText value="{!If(lpoline.Sales_Description__c!=null,lpoline.Sales_Description__c,lpoline.Product__r.Name)}"/><br/>
+                              
+                              <apex:outputText rendered="{!AND(lpoline.Show_Description__c,lpoline.Extended_Sales_Description__c!=null)}" VAlue="{!lpoline.Extended_Sales_Description__c}" style="white-space:pre-line;" escape="false" / > 
+                              </td>
+                              <td align="center" width="8%" valign="top"><apex:outputText value="{!FLOOR(lpoline.Quantity__c)}" /></td>
+                              <td align="center" width="8%" valign="top"><apex:outputText value="{!lpoline.Product__r.Stock_Unit__c}" /></td>
+                              <td align="right" width="15%" valign="top"><apex:outputText value="{0,number,£##,##,##,##0.00}"><apex:param value="{!lpoline.Price__c}"/></apex:outputText></td>
+                              <td align="right" width="15%" valign="top"><apex:outputText value="{0,number,£##,##,##,##0.00}"><apex:param value="{!lpoline.Total_Price__c}"/></apex:outputText></td>
+                              </tr>
+                              <tr><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td></tr>
+                              <apex:variable var="count" value="{!count+1}"   />  
+                    </apex:repeat>
+                    <tr> <td></td> <td></td> <td></td> <td></td> <td></td>
+                    </tr>
+                    <tr> <td></td> <td></td> <td></td> <td></td> <td></td> <td></td>
+                    </tr>
+                    <tr> <td></td> <td></td> <td></td> <td></td> <td></td> <td></td>
+                    </tr>
+                    <tr> <td></td> <td></td> <td></td> <td></td> <td></td> <td></td>
+                    </tr>
+                    <tr> <td></td> <td></td> <td></td> <td></td> <td></td> <td></td>
+                    </tr>
+                    <tr> <td></td> <td></td> <td></td> <td></td> <td></td> <td></td>
+                    </tr>
+                    <tr> <td></td> <td></td> <td></td> <td></td> <td></td> <td></td>
+                    </tr>
+                    <tr> <td></td> <td></td> <td></td> <td></td> <td></td> <td></td>
+                    </tr>
+                    <tr><td colspan="6">
+                   <table border="" width="100%">
+                    <tr> 
+                    
+                    <td align="right" width="90%">Total Price :</td>
+                    <td align="right"><apex:outputText value="{0,number,£##,##,##0.00}"><apex:param value="{!MasterRecord.Total_Price__c}"/></apex:outputText></td>
+                    </tr>
+                    
+                    <tr> 
+                    
+                    <td align="right">VAT Total :</td>
+                    <td align="right">&nbsp;&nbsp;<apex:outputText value="{0,number,£##,##,##0.00}"><apex:param value="{!MasterRecord.Vat_Total__c}"/></apex:outputText></td>
+                    </tr>
+                    
+                    <tr> 
+                    
+                    <td align="right">Order Total :</td>
+                    <td align="right"><apex:outputText value="{0,number,£##,##,##0.00}"><apex:param value="{!MasterRecord.Order_Total__c}"/></apex:outputText></td>
+                    </tr>
+                    </table></td></tr>
+                    </table>
+                   
+                    <br />
+              Our standard terms and conditions of sale and installation apply available on <a href="https://eclipse-dental.com/legal/terms-of-sale/">Terms of Sale</a> E. &amp; O. E.<br /><br />
+              <apex:outputText value="{!lpo.Terms__c}" escape="false" style="white-space:pre-line;"/><br/><br/>
+              Please check we have interpreted your requirements correctly and advise by return any amendments that may be required. Any changes to the above information could affect both the cost and delivery date.<br /><br />
+              <apex:outputPanel rendered="{!ChildRecords.size>0}">
+              <apex:repeat value="{!ChildRecords[0]}" var="man">
+              Your Eclipse Project Manager for this project is {!man.Project_Manager__c}  email:<a hre="{!man.ManagerEmail__c}">{!man.ManagerEmail__c}</a> who can be contacted on 01322 292222. 
+              </apex:repeat>
+              </apex:outputPanel>
+              <br/><br/>However should you require any further information or assistance regarding our products or services please do not hesitate in contacting the under signed.<br /><br />
+              <table Width="50%" style="page-break-inside:avoid;" border="">
+              <tr><td style="text-decoration: underline;font-size:12pt;"><b>Eclipse Contact:</b></td></tr>
+              <tr>
+                  <td >Signed:</td>
+              </tr>
+              <tr>
+                  <td height="50" style = "border: 1px solid black;"><apex:outputText value="{!substitute(lpo.Engineer_s_Signature__c,"alt=","width=\"200px\" Alt=")}" escape="false"/></td>
+              </tr>
+              <tr>
+                  <td >Print:</td>
+              </tr>
+              <tr>
+                  <td height="50" style = "border: 1px solid black;"><apex:outputText value="{!lpo.Engineer_s_Print__c}" escape="false"/></td>
+              </tr>
+              <tr>
+                  <td>Position:</td>
+                 
+               </tr>
+               <tr>
+               <td height="20" style = "border: 1px solid black;"><apex:outputText value="{!lpo.Technician_Position__c}" escape="false"/></td>
+               </tr>
+               <tr>
+                  <td>Date: </td>
+              </tr> 
+              <tr>
+              <td height="20" style = "border: 1px solid black;"><apex:outputField value="{!lpo.Technician_Signed_Date__c}"/></td>
+              </tr>
+            </table>
+            <br/>
+            <table Width="50%" style="page-break-inside:avoid;">
+              <tr><td style="text-decoration: underline;font-size:12pt;"><b>Customer Contact:</b></td></tr>
+              <tr>
+                  <td >Signed:</td>
+              </tr>
+              <tr>
+                  <td height="50" style = "border: 1px solid black;"><apex:outputText value="{!substitute(lpo.Customer_s_Signature__c,"alt=","width=\"200px\" Alt=")}" escape="false"/></td>
+              </tr>
+              <tr>
+                  <td >Print:</td>
+              </tr>
+              <tr>
+                  <td height="50" style = "border: 1px solid black;"><apex:outputText value="{!lpo.Customer_s_Print__c}" escape="false"/></td>
+              </tr>
+              <tr>
+                  <td> Position:</td>
+               </tr>
+               <tr>
+               <td height="20" style = "border: 1px solid black;"> <apex:outputText value="{!lpo.Position__c}" escape="false"/> </td>
+               </tr>
+               <tr>
+                  <td>Date:</td>
+              </tr> 
+              <tr>
+              <td height="20" style = "border: 1px solid black;"><apex:outputField value="{!lpo.Customer_Signed_Date__c}"/></td>
+              </tr>
+            </table>              
+</body>
+</apex:component>
