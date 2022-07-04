@@ -1,0 +1,114 @@
+public with sharing class LongProjectOrderController {
+public String MasterRecordId;
+ 
+    public Project__c[] ChildRecords{get; set;}
+    public List<SalesOrderLineItems__c> salesoli  {get; set;}
+    public SalesOrder__c MasterRecord{get; set;}
+     public Project__c pro{get;set;}
+    public String prono{get;set;}
+    public Boolean checked{get;set;}
+    
+    public LongProjectOrderController()
+    {
+    system.debug('constructor>>>>>>>>');
+      
+}
+
+ public String getMasterRecordId (){        
+        return MasterRecordId ;
+    }
+    public void setMasterRecordId (String msid){
+        this.MasterRecordId =msid;
+        system.debug('MasterRecordId ========'+MasterRecordId );
+        if(!String.isBlank(MasterRecordId)){
+          Proj();
+       }
+        
+    }
+
+public void Proj(){
+MasterRecord =
+                [
+                    SELECT 
+                        Invoice_Address__c,
+                        Delivery_Address__c,
+                        Due_Date__c,Account__r.Site_Contact__r.Name,Name,CreatedBy.Name,CreatedDate,Account__r.Parent_SAGE_ID__c,Fax__c,Email__c,Phone__c,
+                        Account__r.Name,Account__r.Site_Invoice_Name__c,Total_Price__c,Vat_Total__c,Order_Total__c  
+                    FROM
+                        SalesOrder__c
+                    WHERE
+                        Id = :MasterRecordId
+                ];
+                system.debug('<<<<<<>>>>>>>>>');
+                 ChildRecords =
+                [
+                    SELECT 
+                        Features1__c ,Features2__c ,
+                        Schedule_of_work_notes__c,Project_Number__c,name,Range_Room1__c,Range_Room2__c,StartDate__c,Project_Manager__c,Manager_Email__c,Ready_For_Use_On__c ,Note_Points__c,ManagerEmail__c ,
+                        WORKTOP_Room1__c,WORKTOP_Room2__c,PAYMENT_SCHEDULE_Room1__c,PAYMENT_SCHEDULE_Room2__c,DRAWINGS_Room1__c,DRAWINGS_Room2__c,SCHEDULE_OF_WORKS_Room1__c,
+                        SCHEDULE_OF_WORKS_Room2__c,FRONTS_Room1__c,FRONTS_Room2__c,PLINTH_Room1__c,PLINTH_Room2__c,END_PANELS_Room1__c,END_PANELS_Room2__c,HANDLES_Room1__c,HANDLES_Room2__c,SINKS_Room1__c,SINKS_Room2__c,TAPS_Room1__c,TAPS_Room2__c,SOCKETS_Room1__c,SOCKETS_Room2__c,DISPENSERS_Room1__c,DISPENSERS_Room2__c,
+                        UNIT_CONFIGURATION_Room1__c,UNIT_CONFIGURATION_Room2__c,UPHOLSTERY_Room1__c,UPHOLSTERY_Room2__c,FLOORING_Room1__c,FLOORING_Room2__c,CAPPING_Room1__c,CAPPING_Room2__c,DECORATING_Room1__c,DECORATING_Room2__c,SPLASHBACKS_Room1__c,SPLASHBACKS_Room2__c,RPA_Room1__c,RPA_Room2__c,Room1_Payment_Include_In_Print__c,Room2_Payment_Include_In_Print__c,
+                        Room1_Drawings_Include_In_Print__c ,Room2_Drawings_Include_In_Print__c, Room1_Schedulework_Include_In_Print__c,Room2_Schedulework_Include_In_Print__c,Room1_Worktop_Include_In_Print__c,Room2_Worktop_Include_In_Print__c,Room1_Worktop_Type__c,Room2_Worktop_Type__c,Room1_Worktop_Color__c,Room2_Worktop_Color__c,Room1_fronts_Include_In_Print__c,Room2_fronts_Include_In_Print__c,
+                        Room1_Plinth_Include_In_Print__c,Room2_Plinth_Include_In_Print__c,Room1_panels_Include_In_Print__c,Room2_panels_Include_In_Print__c,Room1_Handles_Include_In_Print__c,Room2_Handles_Include_In_Print__c,Room1_sinks_Include_In_Print__c,Room2_sinks_Include_In_Print__c,Room1_Taps_Include_In_Print__c,Room2_Taps_Include_In_Print__c,Room1_Sockets_Include_In_Print__c,Room2_Sockets_Include_In_Print__c,
+                        Room1_Dispensors_Include_In_Print__c,Room2_Dispensors_Include_In_Print__c,Room1_Unitconfig_Include_In_Print__c,Room2_Unitconfig_Include_In_Print__c,Room1_upholstery_Include_In_Print__c,Room2_upholstery_Include_In_Print__c,Room1_Flooring_Include_In_Print__c,Room2_Flooring_Include_In_Print__c,Room1_Capping_Include_In_Print__c,Room2_Capping_Include_In_Print__c,Room1_Decorating_Include_In_Print__c,Room2_Decorating_Include_In_Print__c,
+                        Room1_Splashbacks_Include_In_Print__c,Room2_Splashbacks_Include_In_Print__c,Room1_RPA_Include_In_Print__c,Room2_RPA_Include_In_Print__c,Room1_Frontal_Type__c,Room2_Frontal_Type__c,Room1_Plinth__c,Room2_Plinth__c,Room1_Handles__c,Room2_Handles__c,Room1_Bowl_Type__c,Room2_Bowl_Type__c,Room1_Wall_Paint_Colour__c,Room2_Wall_Paint_Colour__c,Room1_Taps__c,Room2_Taps__c,Room1_Sockets__c,Room2_Sockets__c,Room1_Dispensors__c,Room2_Dispensors__c,
+                        Room1_Unit_Configuration1__c,Room1_Unit_Configuration2__c,Room1_Unit_Configuration3__c,Room1_Unit_Configuration4__c,Room1_Unit_Configuration5__c,Room2_Unit_Configuration1__c,Room2_Unit_Configuration2__c,Room2_Unit_Configuration3__c,Room2_Unit_Configuration4__c,Room2_Unit_Configuration5__c,Room1_Chair_upholstery_colour__c,Room2_Chair_upholstery_colour__c,Room1_Flooring__c,Room2_Flooring__c,Room1_Cove_and_Capped__c,Room2_Cove_and_Capped__c,
+                        Room1_Capping_Colour__c,Room2_Capping_Colour__c,Room1_Ceiling_Paint_Colour__c,Room2_Ceiling_Paint_Colour__c,Room1_Woodwork_Paint_Colour__c,Room2_Woodwork_Paint_Colour__c,Room1_Splashbacks__c,Room2_Splashbacks__c,Room1_Client_received_approval__c,Room2_Client_received_approval__c, Room1_Drawing_finalised__c, Room2_Drawing_finalised__c, Drawing_Reference_Room1__c, Drawing_Reference_Room2__c
+                        
+                    FROM
+                        Project__c
+                    WHERE 
+                        Long_Project_Order__c = :MasterRecordId order by createddate desc limit 1
+                ];
+                system.debug('###########################');
+                system.debug(''+ChildRecords);
+                    checked=true;
+                    For(Project__c po:ChildRecords){
+                    if(((po.Room1_Dispensors_Include_In_Print__c)==checked) &&(po.Room1_Dispensors__c==null))
+                    {
+                        po.Room1_Dispensors__c='None';
+                        system.debug(''+po.Room1_Dispensors__c);
+                    }
+                        
+                        
+                        if(((po.Room1_Splashbacks_Include_In_Print__c)==checked) &&(po.Room1_Splashbacks__c==null)) {
+                            po.Room1_Splashbacks__c='None';
+                            system.debug(''+po.Room1_Splashbacks__c);
+                        } 
+                        
+        
+                }
+                salesoli=
+                [
+                    SELECT 
+                        Price__c,
+                        Product__c,
+                        Quantity__c,
+                        Product__r.Stock_Unit__c,
+                        Extended_Sales_Description__c,
+                        Show_Description__c ,
+                        Sales_Description__c,
+                        Total_Price__c,Product__r.Name
+                    FROM
+                        SalesOrderLineItems__c
+                    WHERE 
+                        Sales_Order__c= :MasterRecordId
+                ];
+                
+                
+                
+    
+       try{
+            if(MasterRecordId != Null){
+                pro=[select id,Project_Number__c from Project__c  where Long_Project_Order__c =:MasterRecordId order by createddate desc limit 1];   
+                system.debug('project number==========='+pro.Project_Number__c );
+                if(pro.Project_Number__c!=null){
+                prono=pro.Project_Number__c;
+                
+                }
+            }
+        }catch(Exception e){}
+        
+    
+}
+}
