@@ -1,0 +1,60 @@
+<apex:page standardController="Quote" renderas="pdf" applyHtmlTag="false" showHeader="false">
+<head>
+<style type="text/css" media="print">
+    body {
+    counter-reset: section;
+}
+
+    @page:first{
+    @top-left {
+    content: "{!Quote.Account.name} - page " counter(page)" of " counter(pages)" &nbsp;&nbsp;&nbsp;Proposal No. {!Quote.QuoteNumber} - &nbsp;<apex:outputText value="{0,number,###,###,##0}">       
+<apex:param value="{!Quote.Version_Number__c}"/> 
+</apex:outputText>";
+    font-family:sans-serif;
+        font-size:8pt;
+        font-weight:bold;
+    }
+    }
+
+    @page{
+    size:A4 portrait;
+    margin-left: 1cm;
+    margin-right: 1cm;
+    margin-top: 1cm;
+    margin-bottom: 2cm;
+    @top-left {
+        content: "{!Quote.Account.name} - continued - page " counter(page)" of " counter(pages)" &nbsp;&nbsp;&nbsp;Proposal No. {!Quote.QuoteNumber} - &nbsp;<apex:outputText value="{0,number,###,###,##0}">       
+<apex:param value="{!Quote.Version_Number__c}"/> 
+</apex:outputText>";
+        font-family:sans-serif;
+        font-size:8pt;
+        font-weight:bold;
+    }
+    @top-center {
+        content: element(header);
+    }
+    @bottom-left {
+        content: element(footer);
+    }
+}
+
+
+
+div.footer {
+    
+    position: running(footer);
+    font-family:sans-serif;
+        font-size:7pt;
+}
+
+.pagenumber:before {
+    content: counter(page)+2;
+}
+.start{
+font-family:sans-serif;
+        font-size:8pt;
+}
+</style>
+</head> 
+<c:LongProjectProposalComponent Lppc="{!Quote}" qoid="{!Quote.Id}"/>
+</apex:page>
